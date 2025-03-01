@@ -1,3 +1,11 @@
+/*
+Dibuat oleh Bimadev
+Source Code ini open source untuk orang.
+Jangan hapus ini untuk menghargai Developer
+
+Happy Coding :_)
+*/
+
 package main
 
 import (
@@ -48,7 +56,7 @@ func initDB() {
 
 // Generate random API Key
 func generateAPIKey() (string, error) {
-	b := make([]byte, 10) // Kurangi panjang agar total tidak terlalu panjang
+	b := make([]byte, 10)
 	if _, err := rand.Read(b); err != nil {
 		return "", err
 	}
@@ -65,7 +73,7 @@ func generateShortURL() (string, error) {
 	return base64.RawURLEncoding.EncodeToString(b)[:6], nil
 }
 
-// CORS Middleware
+// CORS Middleware untuk penggunaaan FE seperti react
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -80,7 +88,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-// Endpoint untuk generate API Key
+// Function untuk generate API Key
 func generateAPIKeyHandler(c *gin.Context) {
 	apiKey, err := generateAPIKey()
 	if err != nil {
@@ -94,7 +102,7 @@ func generateAPIKeyHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"api_key": apiKey})
 }
 
-// Shorten URL dengan validasi API Key
+// Function Shorten URL
 func shortenURL(c *gin.Context) {
 	apiKey := c.GetHeader("X-API-Key")
 	if apiKey == "" {
@@ -128,7 +136,7 @@ func shortenURL(c *gin.Context) {
 	// Validasi alias jika diberikan
 	if req.CustomAlias != "" {
 		if !aliasRegex.MatchString(req.CustomAlias) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid alias. Only letters and numbers allowed (max 15 chars)."})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid alias. Hanya huruf dan angka yang diizinkan (max 15 chars)."})
 			return
 		}
 
@@ -169,7 +177,6 @@ func redirectURL(c *gin.Context) {
 		return
 	}
 
-	// Tambahkan jumlah klik dengan aman
 	db.Model(&url).Update("ClickCount", gorm.Expr("ClickCount + ?", 1))
 
 	c.Redirect(http.StatusFound, url.OriginalURL)
@@ -199,12 +206,12 @@ func main() {
 	initDB()
 
 	r := gin.Default()
-	r.Use(CORSMiddleware()) // Tambahkan CORS Middleware
+	r.Use(CORSMiddleware()) // CORS untuk FE
 
-	r.POST("/generate-key", generateAPIKeyHandler) // Endpoint untuk buat API Key
+	r.POST("/generate-key", generateAPIKeyHandler)
 	r.POST("/shorten", shortenURL)
 	r.GET("/:short", redirectURL)
 	r.GET("/stats/:short", getStats)
 
-	r.Run(":3002")
+	r.Run(":8080")
 }
