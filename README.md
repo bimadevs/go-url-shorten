@@ -31,7 +31,7 @@ URL Shortener adalah layanan API untuk memendekkan URL panjang menjadi URL pende
 2. Install dependensi
    ```bash
    # Inisialisasi modul Go jika belum ada file go.mod
-   go mod init url-shortener
+   go mod init go-url-shorten
 
    # Install dependensi yang diperlukan
    go get github.com/gin-gonic/gin
