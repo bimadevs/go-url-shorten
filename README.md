@@ -24,8 +24,8 @@ URL Shortener adalah layanan API untuk memendekkan URL panjang menjadi URL pende
 
 1. Clone repositori
    ```bash
-   git clone https://github.com/username/url-shortener.git
-   cd url-shortener
+   git clone https://github.com/bimadevs/go-url-shortener.git
+   cd go-url-shortener
    ```
 
 2. Install dependensi
