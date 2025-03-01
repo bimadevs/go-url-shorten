@@ -177,7 +177,8 @@ func redirectURL(c *gin.Context) {
 		return
 	}
 
-	db.Model(&url).Update("ClickCount", gorm.Expr("ClickCount + ?", 1))
+	// Tambahkan jumlah klik
+	db.Model(&url).Update("ClickCount", url.ClickCount+1)
 
 	c.Redirect(http.StatusFound, url.OriginalURL)
 }
